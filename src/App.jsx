@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PlayerSelect from './components/PlayerSelect/PlayerSelect';
 import PlayerCard from './components/PlayerCard/PlayerCard';
+import WikiSummary from './components/WikiSummary/WikiSummary';
 import players from './data/players.json';
 import './App.scss';
 
@@ -23,6 +24,7 @@ function App() {
           />
         </div>
         <PlayerCard player={selectedPlayer} />
+        <WikiSummary player={selectedPlayer} />
       </main>
     </div>
   );
