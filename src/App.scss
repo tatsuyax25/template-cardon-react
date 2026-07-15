@@ -26,3 +26,20 @@
   max-width: 320px;
 }
 
+.app__formation {
+  margin-top: 2.5rem;
+
+  &-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  &-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0;
+  }
+}
+
