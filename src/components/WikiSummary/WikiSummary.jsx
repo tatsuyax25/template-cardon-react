@@ -1,79 +1,66 @@
 import React from 'react';
-import { useQuery } from '@tanstack/react-query';
-import { Tile, InlineLoading } from '@carbon/react';
+import { Tile } from '@carbon/react';
 import './WikiSummary.scss';
 
 /**
- * Trim an extract to the first `n` sentences.
- * Splits on ". ", "! " or "? " boundaries.
+ * Build a grounded summary using only the dataset fields.
+ * Fields used: name, position, age, citizenship, club, rating.
+ * No external sources are consulted.
  */
-function firstSentences(text, n = 3) {
-  if (!text) return text;
-  // Match sentence-ending punctuation followed by a space or end-of-string.
-  const re = /[.!?](?:\s|$)/g;
-  let count = 0;
-  let lastIndex = text.length;
-  let match;
-  while ((match = re.exec(text)) !== null) {
-    count += 1;
-    if (count === n) {
-      lastIndex = match.index + 1; // include the punctuation mark
-      break;
-    }
-  }
-  return text.slice(0, lastIndex).trim();
-}
+function buildSummary(player) {
+  const parts = [];
 
-async function fetchWikiSummary(playerName) {
-  // Best-effort: replace spaces with underscores for the URL slug.
-  const slug = encodeURIComponent(playerName.replace(/ /g, '_'));
-  const url = `https://en.wikipedia.org/api/rest_v1/page/summary/${slug}`;
-  const res = await fetch(url);
-  if (!res.ok) {
-    if (res.status === 404) return null; // no article found — not an error
-    throw new Error(`Wikipedia returned ${res.status}`);
+  // Opening clause: name + position
+  if (player.position) {
+    parts.push(`${player.name} is a ${player.position}.`);
+  } else {
+    parts.push(`${player.name} is a professional footballer.`);
   }
-  const data = await res.json();
-  if (data.type === 'disambiguation') return null; // skip disambiguation pages
-  return data.extract || null;
+
+  // Age
+  if (player.age !== null && player.age !== undefined && player.age !== '') {
+    parts.push(`They are ${player.age} years old.`);
+  }
+
+  // Nationality
+  if (player.citizenship) {
+    parts.push(`Their nationality is ${player.citizenship}.`);
+  }
+
+  // Club
+  if (player.club) {
+    parts.push(`They currently play for ${player.club}.`);
+  }
+
+  // Form rating
+  if (player.rating !== null && player.rating !== undefined && player.rating !== '') {
+    const r = parseFloat(player.rating);
+    let formDesc;
+    if (r >= 8.0) {
+      formDesc = 'in strong form';
+    } else if (r >= 6.0) {
+      formDesc = 'showing consistent form';
+    } else {
+      formDesc = 'building form';
+    }
+    parts.push(`Based on their form rating of ${r.toFixed(1)}, they are currently ${formDesc}.`);
+  }
+
+  parts.push('This profile is based on the available dataset only.');
+
+  return parts.join(' ');
 }
 
 function WikiSummary({ player }) {
-  const { data, isFetching, isError } = useQuery({
-    queryKey: ['wiki', player?.name],
-    queryFn: () => fetchWikiSummary(player.name),
-    enabled: Boolean(player?.name),
-    staleTime: 1000 * 60 * 10, // cache for 10 min
-    retry: 1,
-  });
-
   if (!player) return null;
+
+  const summary = buildSummary(player);
 
   return (
     <Tile className="wiki-summary">
-      <p className="wiki-summary__label">Player Information</p>
-
-      {isFetching && (
-        <InlineLoading description="Loading Wikipedia summary…" />
-      )}
-
-      {!isFetching && isError && (
-        <p className="wiki-summary__text wiki-summary__text--muted">
-          Could not load summary at this time.
-        </p>
-      )}
-
-      {!isFetching && !isError && data && (
-        <p className="wiki-summary__text">{firstSentences(data, 3)}</p>
-      )}
-
-      {!isFetching && !isError && !data && (
-        <p className="wiki-summary__text wiki-summary__text--muted">
-          No Wikipedia article found for this player.
-        </p>
-      )}
-
-      <p className="wiki-summary__source">Source: Wikipedia</p>
+      <p className="wiki-summary__label">Player Summary</p>
+      <p className="wiki-summary__text">{summary}</p>
+      <p className="wiki-summary__source">This summary is based only on the loaded dataset.</p>
     </Tile>
   );
 }
