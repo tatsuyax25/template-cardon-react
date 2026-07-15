@@ -1,0 +1,61 @@
+.player-card {
+  margin-top: 1.5rem;
+  max-width: 360px;
+  text-align: center;
+
+  // ── Photo ──────────────────────────────────────────────
+  &__photo-wrap {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+
+  &__photo {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #e0e0e0;
+    background-color: #f4f4f4;
+  }
+
+  // ── Name ───────────────────────────────────────────────
+  &__name {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0 0 1.25rem;
+  }
+
+  // ── Stats table ────────────────────────────────────────
+  &__stats {
+    text-align: left;
+    margin: 0;
+  }
+
+  &__stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 0.45rem 0;
+    border-bottom: 1px solid #e0e0e0;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  &__label {
+    font-size: 0.875rem;
+    color: #525252;
+    flex-shrink: 0;
+    margin-right: 1rem;
+  }
+
+  &__value {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #161616;
+    text-align: right;
+    margin: 0;
+  }
+}

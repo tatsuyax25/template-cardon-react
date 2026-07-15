@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import PlayerSelect from './components/PlayerSelect/PlayerSelect';
+import PlayerCard from './components/PlayerCard/PlayerCard';
 import players from './data/players.json';
 import './App.scss';
 
 function App() {
-  const [selectedPlayer, setSelectedPlayer] = useState('');
+  const [selectedName, setSelectedName] = useState('');
+
+  const selectedPlayer = players.find((p) => p.name === selectedName) || null;
 
   return (
     <div className="app">
@@ -15,15 +18,11 @@ function App() {
         <div className="app__selector">
           <PlayerSelect
             players={players}
-            value={selectedPlayer}
-            onChange={setSelectedPlayer}
+            value={selectedName}
+            onChange={setSelectedName}
           />
-          {selectedPlayer && (
-            <p className="app__selection-label">
-              Selected: <strong>{selectedPlayer}</strong>
-            </p>
-          )}
         </div>
+        <PlayerCard player={selectedPlayer} />
       </main>
     </div>
   );
