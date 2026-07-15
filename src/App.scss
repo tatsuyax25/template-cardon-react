@@ -1,8 +1,33 @@
 @use './components/Header/header';
 @use './components/Info/info';
-@use './content/UIShell/UIShell';
-@use './content/LandingPage/landing-page';
 
-.app .cds--content {
-  margin-top: 3rem;
+.app {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.app__header {
+  padding: 2rem 0 1rem;
+  border-bottom: 1px solid #e0e0e0;
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    margin: 0;
+  }
+}
+
+.app__main {
+  padding: 2rem 0;
+}
+
+.app__selector {
+  max-width: 320px;
+}
+
+.app__selection-label {
+  margin-top: 1rem;
+  font-size: 0.95rem;
+  color: #525252;
 }
