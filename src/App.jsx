@@ -4,14 +4,9 @@ import PlayerSelect from './components/PlayerSelect/PlayerSelect';
 import PlayerCard from './components/PlayerCard/PlayerCard';
 import WikiSummary from './components/WikiSummary/WikiSummary';
 import FormationBoard from './components/FormationBoard/FormationBoard';
+import { generateRandomTeam } from './utils/teamGenerator';
 import players from './data/players.json';
 import './App.scss';
-
-/** Pick `n` distinct players at random from the full list. */
-function pickRandom(list, n) {
-  const shuffled = [...list].sort(() => Math.random() - 0.5);
-  return shuffled.slice(0, n);
-}
 
 function App() {
   const [selectedName, setSelectedName] = useState('');
@@ -20,7 +15,7 @@ function App() {
   const selectedPlayer = players.find((p) => p.name === selectedName) || null;
 
   const handleGenerateTeam = useCallback(() => {
-    setTeamPlayers(pickRandom(players, 11));
+    setTeamPlayers(generateRandomTeam(players));
   }, []);
 
   return (
