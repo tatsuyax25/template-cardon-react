@@ -1,45 +1,46 @@
 @use './components/Header/header';
 @use './components/Info/info';
 
+// Carbon's Header is 3rem (48px) tall and position: fixed.
+// Push all page content below it.
 .app {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 1.5rem;
-}
-
-.app__header {
-  padding: 2rem 0 1rem;
-  border-bottom: 1px solid #e0e0e0;
-
-  h1 {
-    font-size: 2rem;
-    font-weight: 600;
-    margin: 0;
-  }
+  padding-top: 3rem; // height of Carbon fixed header
 }
 
 .app__main {
   padding: 2rem 0;
 }
 
+// ── Browser page ────────────────────────────────────────────────────────────
+
 .app__selector {
   max-width: 320px;
 }
 
-.app__formation {
-  margin-top: 2.5rem;
+// ── Formation page ───────────────────────────────────────────────────────────
 
-  &-header {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1rem;
-  }
-
-  &-title {
-    font-size: 1.25rem;
-    font-weight: 600;
-    margin: 0;
-  }
+.app__main--formation {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
+.app__formation-title {
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin: 0 0 1.5rem;
+  align-self: flex-start;
+}
+
+.app__formation-actions {
+  margin-bottom: 1.5rem;
+  align-self: flex-start;
+}
+
+.app__formation-board {
+  width: 100%;
+  max-width: 800px;
+}

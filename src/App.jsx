@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { Button } from '@carbon/react';
+import AppHeader from './components/Header/Header';
 import PlayerSelect from './components/PlayerSelect/PlayerSelect';
 import PlayerCard from './components/PlayerCard/PlayerCard';
 import WikiSummary from './components/WikiSummary/WikiSummary';
@@ -9,8 +10,9 @@ import players from './data/players.json';
 import './App.scss';
 
 function App() {
+  const [currentPage, setCurrentPage]   = useState('browser');
   const [selectedName, setSelectedName] = useState('');
-  const [teamPlayers, setTeamPlayers] = useState([]);
+  const [teamPlayers, setTeamPlayers]   = useState([]);
 
   const selectedPlayer = players.find((p) => p.name === selectedName) || null;
 
@@ -19,32 +21,39 @@ function App() {
   }, []);
 
   return (
-    <div className="app">
-      <header className="app__header">
-        <h1>Player Dashboard</h1>
-      </header>
-      <main className="app__main">
-        <div className="app__selector">
-          <PlayerSelect
-            players={players}
-            value={selectedName}
-            onChange={setSelectedName}
-          />
-        </div>
-        <PlayerCard player={selectedPlayer} />
-        <WikiSummary player={selectedPlayer} />
+    <>
+      <AppHeader currentPage={currentPage} onNavigate={setCurrentPage} />
 
-        <div className="app__formation">
-          <div className="app__formation-header">
-            <h2 className="app__formation-title">Team Formation</h2>
-            <Button kind="primary" size="sm" onClick={handleGenerateTeam}>
-              Generate Random Team
-            </Button>
-          </div>
-          <FormationBoard players={teamPlayers} />
-        </div>
-      </main>
-    </div>
+      <div className="app">
+        {currentPage === 'browser' && (
+          <main className="app__main">
+            <div className="app__selector">
+              <PlayerSelect
+                players={players}
+                value={selectedName}
+                onChange={setSelectedName}
+              />
+            </div>
+            <PlayerCard player={selectedPlayer} />
+            <WikiSummary player={selectedPlayer} />
+          </main>
+        )}
+
+        {currentPage === 'formation' && (
+          <main className="app__main app__main--formation">
+            <h1 className="app__formation-title">Team Formation Visualizer</h1>
+            <div className="app__formation-actions">
+              <Button kind="primary" onClick={handleGenerateTeam}>
+                Generate Random Team
+              </Button>
+            </div>
+            <div className="app__formation-board">
+              <FormationBoard players={teamPlayers} />
+            </div>
+          </main>
+        )}
+      </div>
+    </>
   );
 }
 
